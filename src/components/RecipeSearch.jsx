@@ -7,19 +7,22 @@ import PropTypes from 'prop-types';
 const RecipeSearch = ({dispatch}) => {
   let input;
   return (
-    <form onSubmit = {e => {
-      e.preventDefault();
-      if (!input.value.trim()) {
-        return;
-      }
-      dispatch(fetchRecipe(input.value.trim()));
-    }}>
-      <input
-        placeholder='Recipe Search'
-        ref={node => { input = node;}}>
-      </input>
-      <button>Search for Recipe!</button>
-    </form>
+    <div className='searchBar'>
+      <form className='form' onSubmit = {e => {
+        e.preventDefault();
+        if (!input.value.trim()) {
+          return;
+        }
+        dispatch(fetchRecipe(input.value.trim()));
+        input.value= '';
+      }}>
+        <input
+          placeholder='Recipe Search'
+          ref={node => { input = node;}}>
+        </input>
+        <button>Search for Recipe!</button>
+      </form>
+    </div>
   );
 };
 RecipeSearch.propTypes = {

@@ -1,5 +1,5 @@
 import constants from './../constants';
-const { initialState, types } = constants;
+const { initialState, types, firebaseConfig } = constants;
 
 const recipeChangeReducer = (state = initialState.currentRecipeId, action) => {
   switch (action.type) {

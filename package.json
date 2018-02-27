@@ -12,6 +12,7 @@
   "author": "Lew Davidson and Nathan Barrett",
   "license": "ISC",
   "dependencies": {
+    "firebase": "^3.0.0",
     "isomorphic-fetch": "^2.2.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",

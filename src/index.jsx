@@ -5,9 +5,9 @@ import {createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from './reducers';
 import thunkMiddleware from 'redux-thunk';
-import persistDataLocally from './middleware/persist-data-locally';
 
-const store = createStore(rootReducer, applyMiddleware(thunkMiddleware, persistDataLocally));
+
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
   <Provider store={store}>

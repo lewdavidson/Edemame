@@ -1,25 +1,50 @@
 import * as types from './../constants/ActionTypes';
 import v4 from 'uuid/v4';
+import constants from './../constants';
+const { firebaseConfig } = constants;
+import Firebase from 'firebase';
+
+firebase.initializeApp(firebaseConfig);
+const recipes = firebase.database().ref('recipes');
+
 
 export const changeRecipe = (newSelectedRecipeId) => ({
   type: types.CHANGE_RECIPE,
   newSelectedRecipeId
 });
 
-export const requestRecipe = (title, localRecipeId) => ({
-  type: types.REQUEST_RECIPE,
-  title,
-  recipeId: localRecipeId
-});
+// export const requestRecipe = (title, localRecipeId) => ({
+//   type: types.REQUEST_RECIPE,
+//   title,
+//   recipeId: localRecipeId
+// });
 
-export const receiveRecipe = (title, image, instructions, ingredients, recipeId) => ({
-  type: types.RECEIVE_RECIPE,
-  recipeId,
-  title,
-  image,
-  instructions,
-  ingredients
-});
+export const receiveRecipe = (recipeFromFirebase) => {
+  return {
+    type: types.RECEIVE_RECIPE,
+    recipe: recipeFromFirebase
+  };
+};
+
+export function addRecipe(title, image, instructions, ingredients) {
+  return () => recipes.push({
+    title: title,
+    image: image,
+    instructions: instructions,
+    ingredients: ingredients
+  });
+}
+
+export function watchFirebaseRecipesRef() {
+  return function(dispatch) {
+    recipes.on('child_added', data => {
+      const newRecipe = Object.assign({}, data.val(), {
+        id: data.getKey()
+      });
+      dispatch(receiveRecipe(newRecipe));
+    });
+  };
+}
 
 export function fetchRecipe(title) {
   return function (dispatch) {
@@ -30,12 +55,12 @@ export function fetchRecipe(title) {
     ).then(function(json) {
       if (json.hits.length > 0) {
         for (let i = 0; i < 4; i++) {
-          const localRecipeId = v4();
+          // const localRecipeId = v4();
           const title = json.hits[i].recipe.label;
           const image = json.hits[i].recipe.image;
           const instructions = json.hits[i].recipe.url;
           const ingredients = json.hits[i].recipe.ingredientLines;
-          dispatch(receiveRecipe(title, image, instructions, ingredients, localRecipeId));
+          dispatch(addRecipe(title, image, instructions, ingredients));
         }
       } else {
         console.log('They ai\'no recipe');

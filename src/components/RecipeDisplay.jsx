@@ -11,13 +11,13 @@ const RecipeDisplay = ({recipe}) => {
     return <li key={index}>{ingredient}</li>;
   })
   return (
-    <div>
-      <h2>{title}</h2>
+    <div className='display'>
       <img src={image}></img>
-      <p>For instructions,<a href={instructions}>click here!</a> </p>
+      <h2>{title}</h2>
       <ul>
         {ingredientsList}
       </ul>
+      <p>For instructions, <a href={instructions}>click here!</a> </p>
     </div>
   );
 };
@@ -38,22 +38,13 @@ RecipeDisplay.propTypes = {
 const mapStateToProps = state => {
   let info;
   const recipe = state.recipesById[state.currentRecipeId];
-  if (!state.recipesById[state.currentRecipeId].isFetching) {
-    info = {
-      id: state.currentRecipeId,
-      title: recipe.title,
-      image: recipe.image,
-      instructions: recipe.instructions,
-      ingredients: recipe.ingredients
-    };
-  } else {
-    info = {
-      title: '',
-      image: '',
-      instructions: '',
-      ingredients: '',
-    };
-  }
+  info = {
+    id: state.currentRecipeId,
+    title: recipe.title,
+    image: recipe.image,
+    instructions: recipe.instructions,
+    ingredients: recipe.ingredients
+  };
   return {
     recipe: info
   };
